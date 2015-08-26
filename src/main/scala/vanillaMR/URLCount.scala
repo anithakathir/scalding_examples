@@ -11,7 +11,7 @@ object URLCount {
 
     val fileWriter = new PrintWriter(new File(outputFile))
 
-    url.foreach{case(key,value) => if(value >= 5) fileWriter.write(key+"\t"+value)}
+    url.foreach{case(key,value) => if(value >= 5) fileWriter.write(key+"\t"+value+"\n")}
 
     fileWriter.close()
 
