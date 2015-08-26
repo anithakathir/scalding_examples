@@ -5,12 +5,9 @@ import java.io._
 
 object URLCount {
 
-  def countHosts(sampleURLs: String, inputURLs: String, outputFile: String) {
+  def countHosts(inputURLs: String, outputFile: String) {
 
-    val sample = Source.fromFile(sampleURLs).getLines().toSet
-    val input = Source.fromFile(inputURLs).getLines().toSet
-
-    val url = sample.intersect(input).toList.groupBy((url: String) => new java.net.URL(url).getHost).mapValues(_.length)
+    val url = Source.fromFile(inputURLs).getLines().toList.groupBy((url: String) => new java.net.URL(url).getHost).mapValues(_.length)
 
     val fileWriter = new PrintWriter(new File(outputFile))
 
