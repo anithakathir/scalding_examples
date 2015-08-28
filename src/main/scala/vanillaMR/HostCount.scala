@@ -47,12 +47,16 @@ object HostCount extends Configured with Tool {
   class HostCountReducer extends Reducer[Text, LongWritable, Text, LongWritable]{
     protected override def reduce(key: Text, value: java.lang.Iterable[LongWritable], context: Reducer[Text, LongWritable, Text, LongWritable]#Context): Unit = {
 
-      val numURLsWithSameHost = sum(value.toList)
+      val numURLsWithSameHost = value.toList.countEachHosts
       if( numURLsWithSameHost >= 5)
         context.write(key,new LongWritable(numURLsWithSameHost))
 
-      def sum(l: List[LongWritable]): Long = l.foldLeft(0){(acc,sum)=> acc + sum.get().toInt}
     }
+  }
+
+  implicit class Sum(l: List[LongWritable])
+  {
+    def countEachHosts = l.foldLeft(0){(acc,sum)=> acc + sum.get().toInt}
   }
 
   def main(args: Array[String]) {
