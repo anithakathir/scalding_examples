@@ -8,15 +8,20 @@ import cascading.tuple.Fields
 
 class HostCountJobTest extends FlatSpec with ShouldMatchers with TupleConversions{
 
-  val fields = new Fields("host")
+  val fields = new Fields("url")
 
   "url list" should "be grouped by hostname" in {
 
-    val validInput = "http://www.google.com/" :: "http://www.yahoo.com/" :: "http://www.google.com/" :: Nil
+    val validInput = "http://www.google.com/abc" :: "http://www.yahoo.com/def" :: "http://www.google.com/ghi" ::
+      "http://www.yahoo.com/jkl" :: "http://www.yahoo.com/mno" :: "http://www.yahoo.com/pqr" ::
+      "http://www.yahoo.com/stu" :: Nil
 
     def verify(buffer: Buffer[(String, Int)]) {
 
-      buffer.size shouldEqual 2
+      buffer.size shouldEqual 1
+
+      buffer(0)._1 should be ("www.yahoo.com")
+      buffer(0)._2 should be (5)
 
     }
 

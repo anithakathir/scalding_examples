@@ -5,8 +5,8 @@ import java.net.URL
 
 class HostCountJob(args : Args) extends Job(args) {
 
-  Tsv( args("input"), 'line ).read
-    .map('line -> 'host) { url : String => new URL(url).getHost()}
+  Tsv( args("input"), 'url ).read
+    .map('url -> 'host) { url : String => new URL(url).getHost()}
     .groupBy('host) { _.size }
     .filter('size) { count:Int => count >= 5}
     .write( Tsv( args("output") ) )
