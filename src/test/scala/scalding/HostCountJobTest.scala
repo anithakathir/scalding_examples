@@ -22,8 +22,9 @@ class HostCountJobTest extends FlatSpec with ShouldMatchers with TupleConversion
 
     JobTest(new HostCountJob(_))
       .arg("input", "inputFile")
+      .arg("output", "outputFile")
       .source(Tsv("inputFile",fields), validInput)
-      .sink(Tsv("outputFile"))(verify)
+      .sink[(String,Int)](Tsv("outputFile"))(verify)
       .run
       .finish
   }

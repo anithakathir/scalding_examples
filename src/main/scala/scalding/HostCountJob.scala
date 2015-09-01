@@ -4,11 +4,13 @@ import com.twitter.scalding._
 import java.net.URL
 
 class HostCountJob(args : Args) extends Job(args) {
-  TextLine( args("input") )
+
+  Tsv( args("input"), 'line ).read
     .map('line -> 'host) { url : String => new URL(url).getHost()}
     .groupBy('host) { _.size }
     .filter('size) { count:Int => count >= 5}
     .write( Tsv( args("output") ) )
+
 }
 
 object HostCountJob extends App {
