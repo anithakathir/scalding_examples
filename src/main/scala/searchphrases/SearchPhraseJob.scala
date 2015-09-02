@@ -19,6 +19,7 @@ class SearchPhraseJob(args : Args) extends Job(args) {
   def generatePossiblePhrases(text : String) : List[String] = {
 
     val wordList = text
+      .replaceSymbols
       .removeSpecialCharacters
       .toLowerCase.split(" ")
       .toList
@@ -35,7 +36,7 @@ class SearchPhraseJob(args : Args) extends Job(args) {
 object RemoveInsignificantItems
 {
   val insignificantWordsList = List("with","on","of","the","a","an","and")
-  val symbolMap = Map("\"" -> "Inch", "%" -> "Percentage")
+  val symbolExpansionMap = Map("\"" -> "Inch", "%" -> "Percentage")
 
   implicit class RemovePrepositions(list: List[String]) {
 
@@ -48,6 +49,8 @@ object RemoveInsignificantItems
   implicit class RemoveSpecialCharacters(str: String) {
 
     implicit def removeSpecialCharacters: String = str.replaceAll("[^A-Za-z0-9. ]","")
+
+    implicit def replaceSymbols: String = symbolExpansionMap.foldLeft(str){case(text,(symbol,replacement)) => text.replace(symbol,replacement)}
 
   }
 }
