@@ -13,6 +13,7 @@ class SearchPhraseJob(args : Args) extends Job(args) {
     .groupBy('phrase) { _.size('count) }
     .groupBy('count) {_.sortBy('count).reverse}
     .limit(args("limit").toLong)
+	  .project('count,'phrase)
     .write( Tsv( args("output") ) )
 
 
